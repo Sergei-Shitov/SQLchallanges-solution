@@ -46,20 +46,20 @@ solution:
 
 ```SQL
 with load_time as (
-select fwl.user_id,
-       date(fwl.timestamp) as day,
-       max(fwl.timestamp) as load
-from  facebook_web_log fwl
-where fwl.action = 'page_load'
-group by fwl.user_id, day
+    select fwl.user_id,
+        date(fwl.timestamp) as day,
+        max(fwl.timestamp) as load
+    from  facebook_web_log fwl
+    where fwl.action = 'page_load'
+    group by fwl.user_id, day
 ),
 exit_time as (
-select fwl.user_id,
-       date(fwl.timestamp) as day,
-       min(fwl.timestamp) as exit
-from  facebook_web_log fwl
-where fwl.action = 'page_exit'
-group by fwl.user_id, day
+    select fwl.user_id,
+        date(fwl.timestamp) as day,
+        min(fwl.timestamp) as exit
+    from  facebook_web_log fwl
+    where fwl.action = 'page_exit'
+    group by fwl.user_id, day
 )
 select e.user_id,
        avg(e.exit-l.load)
@@ -105,10 +105,10 @@ with mon_sum as (
     order by month
 ),
 prep as (
-select month,
-       value as cur,
-       lag(value) over (order by month) as prev
-from mon_sum
+    select month,
+           value as cur,
+           lag(value) over (order by month) as prev
+    from mon_sum
 )
 select month,
        round((cur - prev)/prev * 100, 2) as MoM
