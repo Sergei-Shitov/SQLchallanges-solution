@@ -6,7 +6,7 @@ Hello! Here you can find my sollutions of challenges from [StrataScratch](https:
 
 [challenge_01](https://platform.stratascratch.com/coding/10354-most-profitable-companies) by Forbes
 
-difficulty: medium
+*difficulty: medium*
 
 Find the 3 most profitable companies in the entire world.
 
@@ -24,7 +24,7 @@ limit 3
 
 [challenge_02](https://platform.stratascratch.com/coding/10353-workers-with-the-highest-salaries) by DoorDash
 
-difficulty: medium
+*difficulty: medium*
 
 Find the titles of workers that earn the highest salary
 
@@ -44,7 +44,7 @@ where w.salary = (select max(salary)
 
 [challenge_03](https://platform.stratascratch.com/coding/10352-users-by-avg-session-time) by Meta/Facebook
 
-difficulty: medium
+*difficulty: medium*
 
 Calculate each user's average session time.
 
@@ -81,7 +81,7 @@ group by e.user_id
 
 Write a query that'll identify returning active users. A returning active user is a user that has made a second purchase within 7 days of any other of their purchases.
 
-difficulty: medium
+*difficulty: medium*
 
 solution
 
@@ -102,7 +102,7 @@ and a.next_order - a.order <= 7
 
 Given a table of purchases by date, calculate the month-over-month percentage change in revenue
 
-difficulty: hard
+*difficulty: hard*
 
 solution
 
@@ -131,7 +131,7 @@ from prep
 
 Write a query that calculates the difference between the highest salaries found in the marketing and engineering departments.
 
-difficulty: easy
+*difficulty: easy*
 
 solution
 
@@ -148,7 +148,7 @@ join db_dept d on e.department_id = d.id
 
 Find the total number of downloads for paying and non-paying users by date.
 
-difficulty: hard
+*difficulty: hard*
 
 solution
 
@@ -176,7 +176,7 @@ order by date
 
 Find the current salary of each employee assuming that salaries increase each year
 
-difficulty: easy
+*difficulty: easy*
 
 solution
 
