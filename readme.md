@@ -193,3 +193,91 @@ group by id,
          department_id
 order by id
 ```
+
+## 09
+
+[challenge_09](https://platform.stratascratch.com/coding/10285-acceptance-rate-by-date) by Meta/Facebook
+
+What is the overall friend acceptance rate by date? Your output should have the rate of acceptances by the date the request was sent. Order by the earliest date to latest.
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select date,
+       count(accepted)::float / count(action) as acc_rate
+from
+    (select date,
+           action,
+           lead(action) over (partition by user_id_sender) as accepted
+    from fb_friend_requests) a
+where action = 'sent'
+group by date
+order by date
+```
+
+## 10
+
+[challenge_10](https://platform.stratascratch.com/coding/10284-popularity-percentage) by Meta/Facebook
+
+Find the popularity percentage for each user on Meta/Facebook. The popularity percentage is defined as the total number of friends the user has divided by the total number of users on the platform
+
+*difficulty: hard*
+
+solution
+
+```SQL
+with friends as(
+select user1,
+       count(user2) as count_friends
+from
+    (select user1, user2
+    from facebook_friends
+    union
+    select user2, user1
+    from facebook_friends) a
+group by user1
+order by count_friends desc
+), total_users as (
+select count(user1) as total
+from friends
+)
+select f.user1,
+       (f.count_friends::float / tu.total)*100 as rating
+from friends f,
+     total_users tu
+order by rating desc
+```
+
+## 11
+
+[challenge_11](https://platform.stratascratch.com/coding/10064-highest-energy-consumption) by Meta/Facebook
+
+Find the date with the highest total energy consumption from the Meta/Facebook data centers.
+
+*difficulty: medium*
+
+solution
+
+```SQL
+with totals as(
+select date,
+       sum(consumption) as tot_cons
+from
+    (select * 
+    from fb_eu_energy
+    union all
+    select * 
+    from fb_asia_energy
+    union all
+    select * 
+    from fb_na_energy) a
+group by date
+order by tot_cons desc
+)
+select *
+from totals
+where tot_cons = (select max(tot_cons)
+                  from totals)
+```
