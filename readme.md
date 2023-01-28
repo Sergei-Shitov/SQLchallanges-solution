@@ -281,3 +281,40 @@ from totals
 where tot_cons = (select max(tot_cons)
                   from totals)
 ```
+
+## 12
+
+[challenge_12](https://platform.stratascratch.com/coding/10061-popularity-of-hack) by Meta/Facebook
+
+Find the average popularity of the Hack per office location
+
+*difficulty: easy*
+
+solution
+
+```SQL
+select e.location,
+       avg(hs.popularity)
+from facebook_employees e
+join facebook_hack_survey hs
+on e.id = hs.employee_id
+group by e.location
+```
+
+## 13
+
+[challenge_13](https://platform.stratascratch.com/coding/10060-top-cool-votes) by Yelp
+
+Find the review_text that received the highest number of 'cool' votes.
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select business_name,
+       review_text
+from yelp_reviews
+where cool = (select max(cool)
+              from yelp_reviews);
+```
