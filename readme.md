@@ -318,3 +318,47 @@ from yelp_reviews
 where cool = (select max(cool)
               from yelp_reviews);
 ```
+
+## 14
+
+[challenge_14](https://platform.stratascratch.com/coding/10049-reviews-of-categories) by Yelp
+
+Find the top business categories based on the total number of reviews
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select unnest(string_to_array(categories, ';')) as cat,
+       sum(review_count) as count
+from yelp_business
+group by cat
+order by count desc
+```
+
+## 15
+
+[challenge_15](https://platform.stratascratch.com/coding/10046-top-5-states-with-5-star-businesses) by Yelp
+
+Find the top 5 states with the most 5 star businesses.
+
+*difficulty: hard*
+
+solution
+
+```SQL
+with ranks as(
+    select state,
+           count(*) as count,
+           dense_rank() over (order by count(*) desc) as ranking
+    from yelp_business
+    where stars = 5
+    group by state
+)
+select state,
+       count
+from ranks
+where ranking < 5
+order by count desc, state
+```
