@@ -351,7 +351,7 @@ solution
 with ranks as(
     select state,
            count(*) as count,
-           dense_rank() over (order by count(*) desc) as ranking
+           rank() over (order by count(*) desc) as ranking
     from yelp_business
     where stars = 5
     group by state
@@ -359,6 +359,6 @@ with ranks as(
 select state,
        count
 from ranks
-where ranking < 5
+where ranking <= 5
 order by count desc, state
 ```
