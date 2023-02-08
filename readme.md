@@ -362,3 +362,114 @@ from ranks
 where ranking <= 5
 order by count desc, state
 ```
+
+## 16
+
+[challenge_16](https://platform.stratascratch.com/coding/9917-average-salaries) by Salesforce
+
+Compare each employee's salary with the average salary of the corresponding department.
+
+*difficulty: easy*
+
+solution
+
+```SQL
+select e.department,
+       e.first_name,
+       e.salary,
+       avg(e.salary) over(partition by department) as avg
+from employee e
+```
+
+## 17
+
+[challenge_17](https://platform.stratascratch.com/coding/9915-highest-cost-orders) by Amazon
+
+Find the customer with the highest daily total order cost between 2019-02-01 to 2019-05-01.
+
+*difficulty: medium*
+
+solution
+
+```SQL
+with calc as(
+select c.first_name,
+       sum(o.total_order_cost) as order_sum,
+       o.order_date
+from customers c
+join orders o
+on c.id = o.cust_id
+where o.order_date between '2019-02-01' and '2019-05-01'
+group by c.first_name,
+         o.order_date
+)
+select *
+from calc c
+where c.order_sum = (select max(cs.order_sum)
+                     from calc cs)
+```
+
+## 18
+
+[challenge_18](https://platform.stratascratch.com/coding/9913-order-details) by Amazon
+
+Find order details made by Jill and Eva.
+
+*difficulty: easy*
+
+solution
+
+```SQL
+select c.first_name,
+       o.order_date,
+       o.order_details,
+       o.total_order_cost
+from customers c
+join orders o
+on c.id = o.cust_id
+where c.first_name in ('Jill', 'Eva')
+order by c.id
+```
+
+## 19
+
+[challenge_19](https://platform.stratascratch.com/coding/9905-highest-target-under-manager) by Salesforce
+
+Find the highest target achieved by the employee or employees who works under the manager id 13.
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select se.first_name,
+       se.target
+from salesforce_employees se
+where se.manager_id = 13
+and se.target = (select max(ses.target)
+                 from salesforce_employees ses
+                 where ses.manager_id = 13)
+```
+
+## 20
+
+[challenge_20](https://platform.stratascratch.com/coding/9897-highest-salary-in-department) by Twitter
+
+Find the employee with the highest salary per department.
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select e.department,
+       e.first_name,
+       e.salary
+from employee e
+join (select es.department,
+             max(es.salary) as max_salary
+      from employee es
+      group by es.department) ess
+on e.department = ess.department
+and e.salary = ess.max_salary
+```
