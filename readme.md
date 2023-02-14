@@ -473,3 +473,103 @@ join (select es.department,
 on e.department = ess.department
 and e.salary = ess.max_salary
 ```
+
+## 21
+
+[challenge_21](https://platform.stratascratch.com/coding/9894-employee-and-manager-salaries) by DropBox
+
+Find employees who are earning more than their managers. Output the employee's first name along with the corresponding salary.
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select e.first_name,
+       e.salary
+from employee e
+where e.salary > (select es.salary
+                  from employee es
+                  where e.manager_id = es.id)
+```
+
+## 22
+
+[challenge_22](https://platform.stratascratch.com/coding/9891-customer-details) by Amazon
+
+Find the details of each customer regardless of whether the customer made an order.
+
+*difficulty: easy*
+
+solution
+
+```SQL
+select c.first_name,
+       c.last_name,
+       c.city,
+       o.order_details
+from customers c
+left join orders o
+on c.id = o.cust_id
+order by 1,4
+```
+
+## 23
+
+[challenge_23](https://platform.stratascratch.com/coding/9782-customer-revenue-in-march) by Meta/Facebook
+
+Calculate the total revenue from each customer in March 2019
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select cust_id,
+       sum(total_order_cost) as revenue
+from orders
+where order_date between '2019-03-01' and '2019-03-31'
+group by cust_id
+order by revenue desc
+```
+
+## 24
+
+[challenge_24](https://platform.stratascratch.com/coding/9728-inspections-that-resulted-in-violations) by City of San Francisco
+
+Count the number of violation in an inspection in 'Roxanne Cafe' for each year
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select extract(year from inspection_date) as year,
+       count(*) as n_inspections
+from sf_restaurant_health_violations
+where business_name = 'Roxanne Cafe'
+group by year
+order by year
+```
+
+## 25
+
+[challenge_25](https://platform.stratascratch.com/coding/9726-classify-business-type) by City of San Francisco
+
+Classify each business as either a restaurant, cafe, school, or other
+
+*difficulty: medium*
+
+solution
+
+```SQL
+select distinct 
+       business_name,
+       case
+        when lower(business_name) like '%restaurant%' then 'restaurant'
+        when lower(business_name) like any(array['%cafe%', '%café%', '%coffee%']) then 'cafe'
+        when lower(business_name) like '%school%' then 'School'
+        else 'other'
+       end as class
+from sf_restaurant_health_violations
+```
